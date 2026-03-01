@@ -2,7 +2,7 @@
 
 An ESP32-based IoT system that monitors greenhouse environmental conditions in real-time and automatically controls irrigation based on soil moisture levels. Sensor data is streamed live to ThingSpeak for remote monitoring and visualization.
 
-**Live Dashboard:** [https://22ug2-0590.github.io/smart-greenhouse-monitering](https://<your-username>.github.io/smart-greenhouse-monitering)
+**Live Dashboard:** [22ug2-0590.github.io/Smart-Agriculture-Monitoring-System](https://22ug2-0590.github.io/Smart-Agriculture-Monitoring-System/)
 
 ---
 
