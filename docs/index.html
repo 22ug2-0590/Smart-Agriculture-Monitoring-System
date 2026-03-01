@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Greenhouse Monitoring System</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #0f1a10;
+      color: #d4e8d4;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #162817;
+      border-bottom: 2px solid #2e7d32;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #81c784;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: #7aad7a;
+    }
+
+    .channel-link {
+      display: inline-block;
+      padding: 7px 16px;
+      background-color: #2e7d32;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .channel-link:hover {
+      background-color: #388e3c;
+    }
+
+    .refresh-bar {
+      background-color: #132014;
+      border-bottom: 1px solid #1e3a1f;
+      padding: 8px 32px;
+      font-size: 0.78rem;
+      color: #5a8c5a;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #countdown {
+      font-weight: 700;
+      color: #81c784;
+    }
+
+    .refresh-btn {
+      background: none;
+      border: 1px solid #2e7d32;
+      color: #81c784;
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 0.76rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .refresh-btn:hover {
+      background-color: #1e3a1f;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .sensor-section {
+      background-color: #132014;
+      border: 1px solid #1e3a1f;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .sensor-section h2 {
+      background-color: #1a2e1b;
+      color: #a5d6a7;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 12px 20px;
+      border-bottom: 1px solid #1e3a1f;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .iframe-row {
+      display: flex;
+      justify-content: center;
+    }
+
+    .iframe-cell {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .iframe-cell:first-child {
+      border-right: none;
+    }
+
+    .iframe-cell span {
+      font-size: 0.75rem;
+      color: #5a8c5a;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .iframe-cell iframe {
+      border-radius: 6px;
+      width: 100%;
+      max-width: 900px;
+      height: 300px;
+      border: 1px solid #2e4a2f;
+      background: #fff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.78rem;
+      color: #3d6b3d;
+      border-top: 1px solid #1e3a1f;
+      margin-top: 16px;
+    }
+
+    footer a {
+      color: #5a8c5a;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      .iframe-row {
+        grid-template-columns: 1fr;
+      }
+
+      .iframe-cell:first-child {
+        border-right: none;
+        border-bottom: 1px solid #1e3a1f;
+      }
+
+      header h1 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>Smart Greenhouse Monitoring System</h1>
+      <p>ESP32 &nbsp;|&nbsp; DHT22 &nbsp;|&nbsp; Soil Moisture &nbsp;|&nbsp; Auto Irrigation &nbsp;|&nbsp; ThingSpeak Channel #3281752</p>
+    </div>
+    <a class="channel-link" href="https://thingspeak.com/channels/3281752" target="_blank" rel="noopener">
+      View on ThingSpeak
+    </a>
+  </header>
+
+  <div class="refresh-bar">
+    <span>Auto-refreshing in <span id="countdown">16</span>s</span>
+    <button class="refresh-btn" onclick="reloadIframes()">Refresh now</button>
+  </div>
+
+  <main>
+
+    <!-- Temperature -->
+    <div class="sensor-section">
+      <h2>Temperature</h2>
+      <div class="iframe-row">
+        <div class="iframe-cell">
+          <iframe id="temp-chart"
+            src="https://thingspeak.com/channels/3281752/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=15&title=Temperature+over+Time&type=line"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Humidity -->
+    <div class="sensor-section">
+      <h2>Humidity</h2>
+      <div class="iframe-row">
+        <div class="iframe-cell">
+          <iframe id="hum-chart"
+            src="https://thingspeak.com/channels/3281752/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=15&title=Humidity+over+Time&type=line&xaxis=Time&yaxis=Humidity"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Soil Moisture -->
+    <div class="sensor-section">
+      <h2>Soil Moisture</h2>
+      <div class="iframe-row">
+        <div class="iframe-cell">
+          <iframe id="soil-chart"
+            src="https://thingspeak.com/channels/3281752/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=15&title=Soil+Moisture+over+Time&type=line&xaxis=Time&yaxis=Moisture"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pump State -->
+    <div class="sensor-section">
+      <h2>Pump State</h2>
+      <div class="iframe-row">
+        <div class="iframe-cell">
+          <iframe id="pump-chart"
+            src="https://thingspeak.com/channels/3281752/charts/4?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=15&title=Pump+State+over+Time&type=line"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Smart Greenhouse Monitoring System &nbsp;|&nbsp; ThingSpeak Channel <a href="https://thingspeak.com/channels/3281752" target="_blank" rel="noopener">#3281752</a> &nbsp;|&nbsp; Data updates every 16 seconds</p>
+  </footer>
+
+  <script>
+    const iframes = [
+      { id: 'temp-chart',  src: 'https://thingspeak.com/channels/3281752/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=15&title=Temperature+over+Time&type=line' },
+      { id: 'hum-chart',   src: 'https://thingspeak.com/channels/3281752/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=15&title=Humidity+over+Time&type=line&xaxis=Time&yaxis=Humidity' },
+      { id: 'soil-chart',  src: 'https://thingspeak.com/channels/3281752/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=15&title=Soil+Moisture+over+Time&type=line&xaxis=Time&yaxis=Moisture' },
+      { id: 'pump-chart',  src: 'https://thingspeak.com/channels/3281752/charts/4?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&timescale=15&title=Pump+State+over+Time&type=line' },
+    ];
+
+    function reloadIframes() {
+      iframes.forEach(({ id, src }) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.src = src + '&_t=' + Date.now();
+        }
+      });
+      resetCountdown();
+    }
+
+    let seconds = 16;
+
+    function resetCountdown() {
+      seconds = 16;
+      document.getElementById('countdown').textContent = seconds;
+    }
+
+    setInterval(() => {
+      seconds--;
+      document.getElementById('countdown').textContent = seconds;
+      if (seconds <= 0) {
+        reloadIframes();
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
