@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Greenhouse Monitoring System</title>
+  <title>Smart Irrigation System and Greenhouse Monitoring</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -12,16 +12,16 @@
     }
 
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background-color: #0f1a10;
-      color: #d4e8d4;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background-color: #f6f8fa;
+      color: #24292f;
       min-height: 100vh;
     }
 
     header {
-      background-color: #162817;
-      border-bottom: 2px solid #2e7d32;
-      padding: 24px 32px;
+      background-color: #24292f;
+      border-bottom: 1px solid #d0d7de;
+      padding: 16px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -30,39 +30,41 @@
     }
 
     header h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #81c784;
-      letter-spacing: 0.5px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 0.3px;
     }
 
     header p {
       font-size: 0.85rem;
-      color: #7aad7a;
+      color: #8b949e;
+      margin-top: 4px;
     }
 
     .channel-link {
       display: inline-block;
-      padding: 7px 16px;
-      background-color: #2e7d32;
+      padding: 5px 16px;
+      background-color: #2da44e;
       color: #fff;
       border-radius: 6px;
       text-decoration: none;
       font-size: 0.82rem;
       font-weight: 600;
+      border: 1px solid rgba(27,31,36,0.15);
       transition: background-color 0.2s;
     }
 
     .channel-link:hover {
-      background-color: #388e3c;
+      background-color: #2c974b;
     }
 
     .refresh-bar {
-      background-color: #132014;
-      border-bottom: 1px solid #1e3a1f;
+      background-color: #ffffff;
+      border-bottom: 1px solid #d0d7de;
       padding: 8px 32px;
       font-size: 0.78rem;
-      color: #5a8c5a;
+      color: #57606a;
       display: flex;
       align-items: center;
       gap: 16px;
@@ -70,22 +72,24 @@
 
     #countdown {
       font-weight: 700;
-      color: #81c784;
+      color: #0969da;
     }
 
     .refresh-btn {
-      background: none;
-      border: 1px solid #2e7d32;
-      color: #81c784;
-      border-radius: 4px;
-      padding: 3px 10px;
+      background-color: #f6f8fa;
+      border: 1px solid #d0d7de;
+      color: #24292f;
+      border-radius: 6px;
+      padding: 3px 12px;
       font-size: 0.76rem;
       cursor: pointer;
-      transition: background-color 0.2s;
+      font-family: inherit;
+      transition: background-color 0.2s, border-color 0.2s;
     }
 
     .refresh-btn:hover {
-      background-color: #1e3a1f;
+      background-color: #f3f4f6;
+      border-color: #afb8c1;
     }
 
     main {
@@ -94,23 +98,23 @@
       padding: 0 24px;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 24px;
     }
 
     .sensor-section {
-      background-color: #132014;
-      border: 1px solid #1e3a1f;
-      border-radius: 10px;
+      background-color: #ffffff;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
       overflow: hidden;
     }
 
     .sensor-section h2 {
-      background-color: #1a2e1b;
-      color: #a5d6a7;
-      font-size: 0.95rem;
+      background-color: #f6f8fa;
+      color: #24292f;
+      font-size: 0.875rem;
       font-weight: 600;
-      padding: 12px 20px;
-      border-bottom: 1px solid #1e3a1f;
+      padding: 10px 16px;
+      border-bottom: 1px solid #d0d7de;
       text-transform: uppercase;
       letter-spacing: 0.8px;
     }
@@ -135,7 +139,7 @@
 
     .iframe-cell span {
       font-size: 0.75rem;
-      color: #5a8c5a;
+      color: #57606a;
       text-transform: uppercase;
       letter-spacing: 0.6px;
     }
@@ -145,7 +149,7 @@
       width: 100%;
       max-width: 900px;
       height: 300px;
-      border: 1px solid #2e4a2f;
+      border: 1px solid #d0d7de;
       background: #fff;
     }
 
@@ -153,13 +157,13 @@
       text-align: center;
       padding: 24px;
       font-size: 0.78rem;
-      color: #3d6b3d;
-      border-top: 1px solid #1e3a1f;
+      color: #57606a;
+      border-top: 1px solid #d0d7de;
       margin-top: 16px;
     }
 
     footer a {
-      color: #5a8c5a;
+      color: #0969da;
       text-decoration: none;
     }
 
@@ -174,7 +178,7 @@
 
       .iframe-cell:first-child {
         border-right: none;
-        border-bottom: 1px solid #1e3a1f;
+        border-bottom: 1px solid #d0d7de;
       }
 
       header h1 {
@@ -187,8 +191,8 @@
 
   <header>
     <div>
-      <h1>Smart Greenhouse Monitoring System</h1>
-      <p>ESP32 &nbsp;|&nbsp; DHT22 &nbsp;|&nbsp; Soil Moisture &nbsp;|&nbsp; Auto Irrigation &nbsp;|&nbsp; ThingSpeak Channel #3281752</p>
+      <h1>Smart Irrigation System and Greenhouse Monitoring</h1>
+      <p>&nbsp; ThingSpeak Channel #3281752</p>
     </div>
     <a class="channel-link" href="https://thingspeak.com/channels/3281752" target="_blank" rel="noopener">
       View on ThingSpeak
@@ -253,7 +257,7 @@
   </main>
 
   <footer>
-    <p>Smart Greenhouse Monitoring System &nbsp;|&nbsp; ThingSpeak Channel <a href="https://thingspeak.com/channels/3281752" target="_blank" rel="noopener">#3281752</a> &nbsp;|&nbsp; Data updates every 16 seconds</p>
+    <p>Smart Irrigation System and Greenhouse Monitoring &nbsp;|&nbsp; ThingSpeak Channel <a href="https://thingspeak.com/channels/3281752" target="_blank" rel="noopener">#3281752</a> &nbsp;|&nbsp; Data updates every 16 seconds</p>
   </footer>
 
   <script>

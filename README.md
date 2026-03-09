@@ -1,4 +1,4 @@
-# Smart Greenhouse Monitoring System
+# Smart Irrigation System and Greenhouse Monitoring
 
 An ESP32-based IoT system that monitors greenhouse environmental conditions in real-time and automatically controls irrigation based on soil moisture levels. Sensor data is streamed live to ThingSpeak for remote monitoring and visualization.
 
